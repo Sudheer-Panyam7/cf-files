@@ -1,0 +1,41 @@
+---
+Parameters:
+
+  AdditionalVolumeSize:
+    Type: Number
+    Default: 10
+
+ 
+
+Resources:
+  EC2Instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-06489866022e12a14
+      InstanceType: t2.micro
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+      SubnetId: subnet-032422c60c5045ed1
+      KeyName:  sudheer-linux
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: !Ref AdditionalVolumeSize
+            VolumeType: gp2
+            "DeleteOnTermination": "false"
+   
+      Tags:
+        -
+          Key: Name
+          Value: cloudFormation-instance
+
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for Jenkins
+      VpcId: vpc-0410c652f04d7216e
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0  
